@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:food_app/authentication/auth_screen.dart';
+//import 'package:food_app/authentication/auth_screen.dart';
 import 'package:food_app/global/global.dart';
+import 'package:food_app/uploadScreens/menus_upload_screen.dart';
+import 'package:food_app/widgets/app_drawer.dart';
 //import 'package:food_app/splashscreen/spash_screen.dart';
+//import 'dart:ui';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -14,6 +17,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: MyDrawer(),
       appBar: AppBar(
         flexibleSpace: Container(
           decoration: BoxDecoration(
@@ -25,24 +29,26 @@ class _HomeScreenState extends State<HomeScreen> {
             tileMode: TileMode.clamp,
           )),
         ),
-        title: Text(sharedPreferences!.getString("name")!),
-        centerTitle: true,
-        automaticallyImplyLeading: false,
-      ),
-      body: Center(
-        child: ElevatedButton(
-          child: Text("Logout"),
-          style: ElevatedButton.styleFrom(
-            onPrimary: Colors.cyan,
-          ),
-          onPressed: () {
-            firebaseAuth.signOut().then((value) {
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (c) => authscreen()));
-            });
-          },
+        title: Text(
+          sharedPreferences!.getString("name")!,
+          style: TextStyle(fontSize: 30, fontFamily: "Lobster"),
         ),
+        centerTitle: true,
+        automaticallyImplyLeading: true,
+        actions: [
+          IconButton(
+            icon: Icon(
+              Icons.post_add,
+              color: Colors.cyan,
+            ),
+            onPressed: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (c) => MenusUploadScreen()));
+            },
+          )
+        ],
       ),
+      body: Center(),
     );
   }
 }
