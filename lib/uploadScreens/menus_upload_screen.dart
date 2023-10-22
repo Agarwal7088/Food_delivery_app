@@ -332,7 +332,8 @@ class _MenusUploadScreenState extends State<MenusUploadScreen> {
 
     clearMenuUploadForm();
     setState(() {
-      uniqueIdName = "";
+      uniqueIdName =
+          uniqueIdName = DateTime.now().microsecondsSinceEpoch.toString();
       uploading = false;
     });
   }

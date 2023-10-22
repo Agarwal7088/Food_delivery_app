@@ -1,8 +1,14 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 //import 'package:food_app/authentication/auth_screen.dart';
 import 'package:food_app/global/global.dart';
+import 'package:food_app/model/menus.dart';
 import 'package:food_app/uploadScreens/menus_upload_screen.dart';
 import 'package:food_app/widgets/app_drawer.dart';
+import 'package:food_app/widgets/info_design.dart';
+import 'package:food_app/widgets/progress_bar.dart';
+import 'package:food_app/widgets/text_widget_header.dart';
 //import 'package:food_app/splashscreen/spash_screen.dart';
 //import 'dart:ui';
 
@@ -48,7 +54,42 @@ class _HomeScreenState extends State<HomeScreen> {
           )
         ],
       ),
-      body: Center(),
+      body: CustomScrollView(
+        slivers: [
+          SliverPersistentHeader(
+            pinned: true,
+            delegate: TextWidgetHeader(title: "My Menus"),
+          ),
+          StreamBuilder<QuerySnapshot>(
+            stream: FirebaseFirestore.instance
+                .collection("sellers")
+                .doc(sharedPreferences!.getString("uid"))
+                .collection("menus")
+                .snapshots(),
+            builder: (context, snapshot) {
+              return !snapshot.hasData
+                  ? SliverToBoxAdapter(
+                      child: Center(
+                        child: CircularProgress(),
+                      ),
+                    )
+                  : SliverStaggeredGrid.countBuilder(
+                      crossAxisCount: 1,
+                      staggeredTileBuilder: (c) => StaggeredTile.fit(1),
+                      itemBuilder: (context, index) {
+                        Menus model = Menus.fromJson(snapshot.data!.docs[index]
+                            .data()! as Map<String, dynamic>);
+                        return InfoDesignWidget(
+                          model: model,
+                          context: context,
+                        );
+                      },
+                      itemCount: snapshot.data!.docs.length,
+                    );
+            },
+          ),
+        ],
+      ),
     );
   }
 }
