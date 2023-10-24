@@ -24,7 +24,7 @@ class Menus {
     menuTitle = json['menuTitle'];
     menuInfo = json['menuInfo'];
     publishedDate = json['publishedDate'];
-    thumbnailUrl = json[' thumbnailUrl'];
+    thumbnailUrl = json['thumbnailUrl'];
     status = json['status'];
   }
   Map<String, dynamic> toJson() {
