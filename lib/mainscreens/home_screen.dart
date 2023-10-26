@@ -9,6 +9,7 @@ import 'package:food_app/widgets/app_drawer.dart';
 import 'package:food_app/widgets/info_design.dart';
 import 'package:food_app/widgets/progress_bar.dart';
 import 'package:food_app/widgets/text_widget_header.dart';
+//import 'package:food_app/widgets/text_widget_header.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -54,15 +55,16 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: CustomScrollView(
         slivers: [
-          // SliverPersistentHeader(
-          //   pinned: true,
-          //   delegate: TextWidgetHeader(title: "My Menus"),
-          // ),
+          SliverPersistentHeader(
+            pinned: true,
+            delegate: TextWidgetHeader(title: "My Menus"),
+          ),
           StreamBuilder<QuerySnapshot>(
             stream: FirebaseFirestore.instance
                 .collection("sellers")
                 .doc(sharedPreferences!.getString("uid"))
                 .collection("menus")
+                .orderBy("publishedDate", descending: true)
                 .snapshots(),
             builder: (context, snapshot) {
               return !snapshot.hasData
