@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -61,17 +63,18 @@ class _ItemsScreenState extends State<ItemsScreen> {
         slivers: [
           SliverPersistentHeader(
               pinned: true,
+              floating: false,
               delegate: TextWidgetHeader(
                   title:
                       "My" + widget.model!.menuTitle.toString() + "'s Items")),
           StreamBuilder<QuerySnapshot>(
             stream: FirebaseFirestore.instance
-                .collection("sellers")
-                .doc(sharedPreferences!.getString("uid"))
-                .collection("menus")
+                .collection('sellers')
+                .doc(sharedPreferences!.getString('uid'))
+                .collection('menus')
                 .doc(widget.model!.menuID)
-                .collection("items")
-                .orderBy("publishedDate", descending: true)
+                .collection('items')
+                .orderBy('publishedDate', descending: true)
                 .snapshots(),
             builder: (context, snapshot) {
               return !snapshot.hasData
@@ -86,6 +89,7 @@ class _ItemsScreenState extends State<ItemsScreen> {
                       itemBuilder: (context, index) {
                         Items model = Items.fromJson(snapshot.data!.docs[index]
                             .data()! as Map<String, dynamic>);
+                        log(model.toString());
                         return ItemsDesignWidget(
                           model: model,
                           context: context,
